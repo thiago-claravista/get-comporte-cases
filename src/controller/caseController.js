@@ -14,18 +14,24 @@ exports.getCases = async (req, res) => {
     if (id) {
       const foundCases = await selectRows(
         "Cases",
-        `CASENUMBER='${id.trim()}' OR ID='${id.trim()}'`,
+        `CASENUMBER='${id.trim()}' OR ID='${id.trim()}' OR SOURCEID='${id.trim()}'`,
         limit,
         page
       );
 
       res.status(200).json({ cases: foundCases, count: foundCases.length });
     } else {
-      const { email, contact, createdDate, closedDate } = req.query;
+      const { email, cpf, contact, createdDate, closedDate } = req.query;
       const queries = [];
 
       if (email?.trim()) {
         queries.push(`CONTACTEMAIL = '${email.trim()}'`);
+      }
+
+      if (cpf?.trim()) {
+        queries.push(
+          `(CPF_DO_PORTADOR__C = '${cpf.trim()}' OR CPF_DO_PORTADOR_PIX__C = '${cpf.trim()}')`
+        );
       }
 
       if (contact?.trim()) {
@@ -49,19 +55,19 @@ exports.getCases = async (req, res) => {
       if (createdDate?.trim()) {
         if (dateRegex.test(createdDate.trim())) {
           queries.push(`CREATEDDATE >= '${createdDate.trim()}'`);
-
-          if (closedDate?.trim()) {
-            if (dateRegex.test(closedDate.trim())) {
-              queries.push(`CLOSEDDATE <= '${closedDate.trim()}'`);
-            } else {
-              return res.status(400).json({
-                error: `Formato de data inválido para o parâmetro 'closedDate'.`,
-              });
-            }
-          }
         } else {
           return res.status(400).json({
             error: `Formato de data inválido para o parâmetro 'createdDate'.`,
+          });
+        }
+      }
+
+      if (closedDate?.trim()) {
+        if (dateRegex.test(closedDate.trim())) {
+          queries.push(`CLOSEDDATE <= '${closedDate.trim()}'`);
+        } else {
+          return res.status(400).json({
+            error: `Formato de data inválido para o parâmetro 'closedDate'.`,
           });
         }
       }
