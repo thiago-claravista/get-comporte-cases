@@ -19,7 +19,7 @@ API de listagem e consultar os casos _(Cases)_, anexos _(Attachments)_ e documen
 
 ## **Autenticação**
 
-Para realizar as requisições nos endpoints da API, é necessário se autenticar passando no cabeçalho da requisição um token fixo precedido da palavra 'Bearer'. O token é alcançado através da codificação da palavra passe 'Claravista@2022' utilizando `base64`.<br>
+Para realizar as requisições nos endpoints da API, é necessário se autenticar passando no cabeçalho da requisição um token fixo. O token é alcançado através da codificação da palavra passe 'Claravista@2022' utilizando `base64`.<br>
 É recomendável utilizar o método `btoa()`, nativo do JavaScript, que codifica `utf-16` para `base64`:
 
 ```javascript
@@ -31,7 +31,7 @@ No cabeçalho da requisição teríamos algo parecido com:
 
 ```javascript
 {
-  Authorization: `Bearer ${btoa("Claravista@2020")}`;
+  Authorization: `${btoa("Claravista@2020")}`;
 }
 ```
 
