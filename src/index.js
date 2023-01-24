@@ -1,8 +1,13 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const useDatabase = require("./database/useDatabase");
 const app = express();
 const port = process.env.PORT || 3000;
+const authorization = require("./middlewares/authentication");
+
+app.use(cors());
+app.use(authorization);
 
 const init = async () => {
   await useDatabase(process.env.DATABASE); // seleciona o banco de dados

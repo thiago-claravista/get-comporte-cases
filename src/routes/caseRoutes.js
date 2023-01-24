@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const controller = require("../controller/caseController");
+const controller = require("../controllers/caseController");
 
 router.get("/:id", controller.getCases);
 router.get("/", controller.getCases);

@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const controller = require("../controller/attachmentController");
+const controller = require("../controllers/attachmentController");
 
 router.get("/", controller.getAttachments);
 router.get("/:id", controller.getAttachment);
