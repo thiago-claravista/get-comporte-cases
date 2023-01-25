@@ -15,7 +15,6 @@
 ## **Introdução**
 
 API de listagem e consultar os casos _(Cases)_, anexos _(Attachments)_ e documentos _(Documents)_ exportados da plataforma _Salesforce Sales_ da Comporte e consumidos em um banco de dados MySQL.
-<br><br>
 
 ## **Autenticação**
 
@@ -35,8 +34,6 @@ No cabeçalho da requisição teríamos algo parecido com:
 }
 ```
 
-<br><br>
-
 ## **Formatos de Data**
 
 As datas são validadas na aplicação utilizando a expressão regular `/^(\d{2,4}-?){3}(\s(\d{2}:?){3})?$/`. Sendo assim, as datas aceitas devem conter o formato ano, mês e dia (`yyyy-mm-dd`) podendo ou não conter horários (`yyyy-mm-dd hh:mm:ss`). <br>
@@ -54,7 +51,6 @@ Exemplos de algumas datas válidas e inválidas:
 - 01/01/2022
 - 01/01/2022 00:00
 - 2022/01/01
-  <br><br>
 
 ## **Consultas**
 
