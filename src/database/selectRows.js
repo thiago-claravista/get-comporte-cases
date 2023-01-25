@@ -14,6 +14,9 @@ const selectRows = async (tableName, conditions, limit, page) => {
       ...error,
       description: `Erro ao consultar registros na tabela '${tableName}'!`,
     };
+  } finally {
+    const conn = await connection.getConnection();
+    conn.release();
   }
 };
 

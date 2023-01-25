@@ -10,11 +10,11 @@ const connectionUri = {
 let connection;
 
 /**
- * @return {Promise<mysql.Connection>}
+ * @return {Promise<mysql.Pool>}
  */
 exports.connect = async () => {
   try {
-    connection = await mysql.createConnection(connectionUri);
+    connection = mysql.createPool(connectionUri);
     console.log("Conectado com o banco de dados MySQL");
     return connection;
   } catch (error) {
@@ -23,7 +23,7 @@ exports.connect = async () => {
 };
 
 /**
- * @return {Promise<mysql.Connection>}
+ * @return {Promise<mysql.Pool>}
  */
 exports.getConnection = async () => {
   if (!connection) {

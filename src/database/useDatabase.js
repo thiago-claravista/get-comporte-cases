@@ -9,6 +9,9 @@ const useDatabase = async (database) => {
   } catch (error) {
     console.log(`Erro ao selecionar o database '${database}':`);
     console.log(error);
+  } finally {
+    const conn = await connection.getConnection();
+    conn.release();
   }
 };
 
