@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const { Buffer } = require("buffer");
 
@@ -12,7 +13,7 @@ const authentication = (req, res, next) => {
   if (authorization) {
     const decoded = Buffer.from(authorization, "base64").toString("utf-8");
 
-    if (decoded === "Claravista@2022") {
+    if (decoded === process.env.AUTH_PASSWORD) {
       return next();
     }
 
