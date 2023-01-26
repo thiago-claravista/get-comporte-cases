@@ -11,6 +11,8 @@
   - [Obtendo o conteúdo dos ANEXOS](#obtendo-o-conteúdo-dos-anexos)
   - [Consultando DOCUMENTOS](#consultando-documentos)
   - [Obtendo o conteúdo dos DOCUMENTOS](#obtendo-o-conteúdo-dos-documentos)
+  - [Consultando CONTAS](#consultando-contas)
+  - [Consultando CONTAS únicos](#consultando-contas-únicos)
 
 ## **Introdução**
 

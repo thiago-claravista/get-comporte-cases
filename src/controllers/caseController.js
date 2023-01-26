@@ -58,7 +58,6 @@ exports.getCases = async (req, res) => {
               .json({ error: `E-mail não encontrado na base de dados!` });
           }
         }
-        // queries.push(`CONTACTEMAIL = '${email.trim()}'`);
       }
 
       if (contact?.trim()) {
@@ -70,15 +69,8 @@ exports.getCases = async (req, res) => {
         if (match) {
           const [, ddd, firstPart, secondPart] = match;
           phone = `(${ddd}) ${firstPart}-${secondPart}`;
-
-          // queries.push(
-          //   `(CONTACTMOBILE = '${phone}' OR CONTACTPHONE = '${phone}')`
-          // );
         } else {
           phone = contact.trim();
-          // queries.push(
-          //   `(CONTACTMOBILE = '${contact?.trim()}' OR CONTACTPHONE = '${contact?.trim()}')`
-          // );
         }
 
         if (account) {
