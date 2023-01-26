@@ -1,5 +1,6 @@
 const express = require("express");
 const selectRows = require("../database/selectRows");
+const findAccount = require("../utils/findAccount");
 
 /**
  * @param {express.Request} req
@@ -9,6 +10,7 @@ exports.getCases = async (req, res) => {
   const { id } = req.params;
   const { limit = 100, page = 1 } = req.query;
   const dateRegex = /^(\d{2,4}-?){3}(\s(\d{2}:?){3})?$/;
+  let account;
 
   try {
     if (id) {
@@ -21,34 +23,84 @@ exports.getCases = async (req, res) => {
 
       res.status(200).json({ cases: foundCases, count: foundCases.length });
     } else {
-      const { email, cpf, contact, createdDate, closedDate } = req.query;
+      const { cpf, email, contact, createdDate, closedDate } = req.query;
       const queries = [];
 
-      if (email?.trim()) {
-        queries.push(`CONTACTEMAIL = '${email.trim()}'`);
+      if (cpf?.trim()) {
+        // obter a conta do cpf
+        const cleanCpf = cpf.trim().replace(/[^\w]/g, "");
+        const foundAccount = await findAccount("CNPJCPF__C", cleanCpf);
+
+        if (foundAccount) {
+          account = foundAccount;
+        } else {
+          return res
+            .status(400)
+            .json({ error: `CPF não encontrado na base de dados!` });
+        }
       }
 
-      if (cpf?.trim()) {
-        queries.push(
-          `(CPF_DO_PORTADOR__C = '${cpf.trim()}' OR CPF_DO_PORTADOR_PIX__C = '${cpf.trim()}')`
-        );
+      if (email?.trim()) {
+        if (account) {
+          if (account.PERSONEMAIL !== email?.trim()) {
+            return res
+              .status(400)
+              .json({ error: `Usuário não encontrado na base de dados!` });
+          }
+        } else {
+          const foundAccount = await findAccount("PERSONEMAIL", email?.trim());
+
+          if (foundAccount) {
+            account = foundAccount;
+          } else {
+            return res
+              .status(400)
+              .json({ error: `E-mail não encontrado na base de dados!` });
+          }
+        }
+        // queries.push(`CONTACTEMAIL = '${email.trim()}'`);
       }
 
       if (contact?.trim()) {
         const match = contact
           .trim()
           .match(/^\(?(\d{2})\)?\s?(\d{4,5})-?(\d{4})$/);
+        let phone;
 
         if (match) {
           const [, ddd, firstPart, secondPart] = match;
-          const phone = `(${ddd}) ${firstPart}-${secondPart}`;
-          queries.push(
-            `(CONTACTMOBILE = '${phone}' OR CONTACTPHONE = '${phone}')`
-          );
+          phone = `(${ddd}) ${firstPart}-${secondPart}`;
+
+          // queries.push(
+          //   `(CONTACTMOBILE = '${phone}' OR CONTACTPHONE = '${phone}')`
+          // );
         } else {
-          queries.push(
-            `(CONTACTMOBILE = '${contact?.trim()}' OR CONTACTPHONE = '${contact?.trim()}')`
+          phone = contact.trim();
+          // queries.push(
+          //   `(CONTACTMOBILE = '${contact?.trim()}' OR CONTACTPHONE = '${contact?.trim()}')`
+          // );
+        }
+
+        if (account) {
+          console.log(phone, account.PERSONMOBILEPHONE, account.PHONE);
+          if (account.PERSONMOBILEPHONE !== phone && account.PHONE !== phone) {
+            return res
+              .status(400)
+              .json({ error: `Usuário não encontrado na base de dados!` });
+          }
+        } else {
+          const foundAccount = await findAccount(
+            ["PERSONMOBILEPHONE", "PHONE"],
+            phone
           );
+
+          if (foundAccount) {
+            account = foundAccount;
+          } else {
+            return res
+              .status(400)
+              .json({ error: `Telefone não encontrado na base de dados!` });
+          }
         }
       }
 
@@ -82,6 +134,10 @@ exports.getCases = async (req, res) => {
         return res
           .status(400)
           .json({ error: `O parâmetro 'page' deve ser um valor numérico` });
+      }
+
+      if (account?.ID) {
+        queries.push(`ACCOUNTID = '${account.ID}'`);
       }
 
       const conditions = queries.join(" AND ");

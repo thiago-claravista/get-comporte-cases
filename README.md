@@ -71,7 +71,7 @@ Outros parâmetros também são aceitos como filtro na requisição, alguns dele
 ### Consultando CASOS únicos
 
 ![GET](https://img.shields.io/badge/-GET-blue) <br>
-Para uma pesquisa mais direta e objetiva, é possível efetuar uma busca por identificador para o endpoint **_`/cases/:id`_**, substituindo **_`:id`_** pelo Id do caso (_ID_) ou o número do caso (_CASENUMBER_) quando o usuário possuir essa informação. Exemplo _`/cases/5003k00001jRr11AAC`_ (Id) ou _`/cases/00050085`_ (Nº do caso).
+Para uma pesquisa mais direta e objetiva, é possível efetuar uma busca por identificador para o endpoint **_`/cases/:id`_**, substituindo **_`:id`_** pelo Id do caso (_ID_) ou o número do caso (_CASENUMBER_) (obtido na [listagem anterior](#consultando-casos)). Exemplo _`/cases/5003k00001jRr11AAC`_ (Id) ou _`/cases/00050085`_ (Nº do caso).
 
 ### Consultando comentários do CASO
 
@@ -101,4 +101,19 @@ Para obter a listagem de documentos contendo as características, basta enviar u
 ### Obtendo o conteúdo dos DOCUMENTOS
 
 ![GET](https://img.shields.io/badge/-GET-blue) <br>
-Para obter o conteúdo do documents é necessário requisitar ao endpoint **_`/documents/:id`_**, substituindo **_`:id`_** pelo ID do documents (obtido na [listagem anterior](#consultando-documentos)), exemplo _`/documents/0153k000008zRY6AAM`_.
+Para obter o conteúdo do documents é necessário requisitar ao endpoint **_`/documents/:id`_**, substituindo **_`:id`_** pelo ID do documento (obtido na [listagem anterior](#consultando-documentos)), exemplo _`/documents/0153k000008zRY6AAM`_.
+
+### Consultando CONTAS
+
+![GET](https://img.shields.io/badge/-GET-blue) <br>
+Para obter a listagem completa das contas de usuários, basta enviar uma requisição `GET` para o endpoint **_`/accounts`_** e em caso de sucesso (_status code `200`_) uma lista paginada será retornada. É possível definir através dos _query params_ `limit` e `page` o limite de registros retornados e a página referente, exemplo _`/accounts?limit=500&page=2`_. Caso esses parâmetros sejam omitidos, os valores assumidos como padrão serão `limit = 100` e `page = 1`.<br>
+Outros parâmetros também são aceitos como filtro na requisição, alguns deles são:
+
+- `email`: E-mail de contato do cliente, presente na coluna PERSONEMAIL;
+- `cpf`: CPF do cliente, presente na coluna CNPJCPF\_\_C
+- `contact`: Telefone de contato do cliente, presente nas colunas PERSONMOBILEPHONE ou PHONE;
+
+### Consultando CONTAS únicos
+
+![GET](https://img.shields.io/badge/-GET-blue) <br>
+Para uma pesquisa mais direta e objetiva, é possível efetuar uma busca por identificador para o endpoint **_`/accounts/:id`_**, substituindo **_`:id`_** pelo ID da conta de usuário (_ID_) (obtido na [listagem anterior](#consultando-contas)). Exemplo _`/accounts/5003k00001kmUNJAA2`_ (ID).
