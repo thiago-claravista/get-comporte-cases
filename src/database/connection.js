@@ -1,5 +1,5 @@
 const mysql = require("mysql2/promise");
-const useDatabase = require("./useDatabase");
+
 require("dotenv").config();
 
 const connectionUri = {
@@ -16,11 +16,12 @@ let connection;
 exports.connect = async () => {
   try {
     connection = mysql.createPool(connectionUri);
-    connection.on("acquire", () => {
-      useDatabase(process.env.DATABASE); // seleciona o banco de dados
-    });
-
     console.log("Conectado com o banco de dados MySQL");
+
+    connection.on("connection", () => {
+      const useDatabase = require("./useDatabase");
+      useDatabase(process.env.DATABASE);
+    });
 
     return connection;
   } catch (error) {
