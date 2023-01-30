@@ -16,7 +16,7 @@ let connection;
 exports.connect = async () => {
   try {
     connection = mysql.createPool(connectionUri);
-    connection.on("connection", () => {
+    connection.on("acquire", () => {
       useDatabase(process.env.DATABASE); // seleciona o banco de dados
     });
 
