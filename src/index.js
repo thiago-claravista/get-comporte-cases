@@ -17,11 +17,13 @@ const init = async () => {
   const attachmentRoutes = require("./routes/attachmentRoutes");
   const documentRoutes = require("./routes/documentRoutes");
   const accountRoutes = require("./routes/accountRoutes");
+  const surveyRoutes = require("./routes/satisfactionSurveyRoutes");
 
   app.use("/cases", caseRoutes);
   app.use("/attachments", attachmentRoutes);
   app.use("/documents", documentRoutes);
   app.use("/accounts", accountRoutes);
+  app.use("/surveys", surveyRoutes);
 
   app.listen(port, () =>
     console.log(`'get-comporte-cases' rodando na porta ${port}...`)
