@@ -176,3 +176,32 @@ exports.getCaseComments = async (req, res) => {
     }
   }
 };
+
+/**
+ * @param {express.Request} req
+ * @param {express.Response} res
+ */
+exports.getCaseFeeds = async (req, res) => {
+  const { id } = req.params;
+  const { limit = 100, page = 1 } = req.query;
+
+  if (id) {
+    try {
+      const foundCases = await selectRows(
+        "Feeds",
+        `ParentId='${id.trim()}'`,
+        limit,
+        page
+      );
+
+      res.status(200).json({
+        feeds: foundCases,
+        count: foundCases.length,
+        limit: Number(limit),
+        page: Number(page),
+      });
+    } catch (error) {
+      res.status(500).json({ ...error });
+    }
+  }
+};
