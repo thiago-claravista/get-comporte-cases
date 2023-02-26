@@ -205,3 +205,42 @@ exports.getCaseFeeds = async (req, res) => {
     }
   }
 };
+
+/**
+ * @param {express.Request} req
+ * @param {express.Response} res
+ */
+exports.getCaseAttachments = async (req, res) => {
+  const { id } = req.params;
+  const { limit = 100, page = 1 } = req.query;
+
+  if (id) {
+    try {
+      const foundDocumentLinks = await selectRows(
+        "ContentDocumentLinks",
+        `LinkedEntityId='${id.trim()}'`,
+        limit,
+        page
+      );
+
+      const contentDocumentIds = foundDocumentLinks.map(
+        (dl) => dl.ContentDocumentId
+      );
+      const foundContentVersions = await selectRows(
+        "ContentVersions",
+        `ContentDocumentId IN ('${contentDocumentIds.join("','")}')`,
+        limit,
+        page
+      );
+
+      res.status(200).json({
+        attachments: foundContentVersions,
+        count: foundContentVersions.length,
+        limit: Number(limit),
+        page: Number(page),
+      });
+    } catch (error) {
+      res.status(500).json({ ...error });
+    }
+  }
+};
