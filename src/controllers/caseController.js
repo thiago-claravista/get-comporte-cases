@@ -1,5 +1,6 @@
 const express = require("express");
 const selectRows = require("../database/selectRows");
+const updateRow = require("../database/updateRow");
 const findAccount = require("../utils/findAccount");
 
 /**
@@ -239,6 +240,30 @@ exports.getCaseAttachments = async (req, res) => {
         limit: Number(limit),
         page: Number(page),
       });
+    } catch (error) {
+      res.status(500).json({ ...error });
+    }
+  }
+};
+
+/**
+ * @param {express.Request} req
+ * @param {express.Response} res
+ */
+exports.putZendeskTicketId = async (req, res) => {
+  const { id } = req.params;
+  const { ticket_id } = req.body;
+
+  if (id) {
+    if (isNaN(ticket_id) && ticket_id !== null) {
+      return res.status(400).json({
+        error: `O atributo 'ticket_id' é obrigatório e deve ser um valor numérico`,
+      });
+    }
+
+    try {
+      await updateRow("Cases", id, { ZENDESK_TICKET_ID: Number(ticket_id) });
+      res.status(204).end();
     } catch (error) {
       res.status(500).json({ ...error });
     }

@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const authorization = require("./middlewares/authentication");
 
+app.use(express.json());
 app.use(cors());
 app.use(authorization);
 
