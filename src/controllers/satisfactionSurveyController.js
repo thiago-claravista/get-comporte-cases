@@ -42,7 +42,7 @@ exports.getSurvey = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [foundSurveys] = await selectRows("Pesquisas", `ID = '${id}'`, 1, 1);
+    const foundSurveys = await selectRows("Pesquisas", `ID = '${id}'`, 1, 1);
 
     res.status(200).json({
       surveys: foundSurveys,
