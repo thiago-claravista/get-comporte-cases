@@ -45,7 +45,7 @@ exports.getSurvey = async (req, res) => {
     const [foundSurveys] = await selectRows("Pesquisas", `ID = '${id}'`, 1, 1);
 
     res.status(200).json({
-      attachments: foundSurveys,
+      surveys: foundSurveys,
     });
   } catch (error) {
     res.status(500).json({ ...error });
