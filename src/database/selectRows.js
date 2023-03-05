@@ -7,7 +7,7 @@ const selectRows = async (tableName, conditions, limit, page) => {
   } LIMIT ${limit * (page - 1)}, ${limit};`;
 
   try {
-    const [rows] = await connection.execute(query);
+    const [rows] = await connection.query(query);
     return rows;
   } catch (error) {
     throw {

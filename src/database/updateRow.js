@@ -14,7 +14,7 @@ const updateRow = async (tableName, id, data) => {
   const query = `UPDATE ${tableName} SET ${changes} WHERE ID='${id}';`;
 
   try {
-    const [rows] = await connection.execute(query);
+    const [rows] = await connection.query(query);
     return rows;
   } catch (error) {
     throw {
