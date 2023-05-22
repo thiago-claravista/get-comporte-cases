@@ -24,7 +24,8 @@ exports.getCases = async (req, res) => {
 
       res.status(200).json({ cases: foundCases, count: foundCases.length });
     } else {
-      const { cpf, email, contact, createdDate, closedDate } = req.query;
+      const { cpf, email, contact, createdDate, closedDate, subject } =
+        req.query;
       const queries = [];
 
       if (cpf?.trim()) {
@@ -115,6 +116,10 @@ exports.getCases = async (req, res) => {
             error: `Formato de data inválido para o parâmetro 'closedDate'.`,
           });
         }
+      }
+
+      if (subject?.trim()) {
+        queries.push(`SUBJECT = '${subject}'`);
       }
 
       if (limit?.trim?.() && isNaN(limit)) {
